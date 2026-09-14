@@ -7,4 +7,17 @@ public class Biblioteca {
         libros = new ArrayList<>();
     }
 
+    public void agregarLibro(Libro libro) {
+        libros.add(libro);
+    }
+
+    public boolean codigoExistente(String codigo) {
+        for (Libro libro : libros) {
+            if (libro.getCodigo().equals(codigo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
