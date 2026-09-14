@@ -43,5 +43,40 @@ public class VentanaPrincipal extends JFrame {
 
         JButton btnCrear = new JButton("Crear Libro");
         panel.add(btnCrear);
+
+        setTitle("Gestión de libros");
+        setSize(500,400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        btnCrear.addActionListener(e -> crearLibro());
+        add(panel);
+    }
+
+    private void crearLibro() {
+        String titulo = txtTitulo.getText();
+        String autor = txtAutor.getText();
+        String codigo = txtCodigo.getText();
+        String genero = txtGenero.getText();
+        String año = txtAño.getText();
+        String copias = txtCopias.getText();
+
+        if (titulo.isEmpty() || autor.isEmpty() || codigo.isEmpty() || genero.isEmpty() || año.isEmpty() || copias.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor ingrese todos los campos");
+        }
+        int añoPlublicacion;
+        int  copiasPlublicacion;
+
+        try {
+            añoPlublicacion=Integer.parseInt(año);
+            copiasPlublicacion=Integer.parseInt(copias);
+        }catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "El año y las copias deben de ser numeros");
+            return;
+        }
+        if (copiasPlublicacion < 0){
+            JOptionPane.showMessageDialog(null, "La copia debe ser positivo");
+            return;
+        }
     }
 }
