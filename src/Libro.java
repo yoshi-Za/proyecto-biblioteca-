@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Libro {
 
     private String titulo;
@@ -55,8 +53,4 @@ public class Libro {
         this.copiasDisponibles = copiasDisponibles;
     }
 
-    private ArrayList<Libro> libros;
-    public Libro() {
-        libros = new ArrayList<>();
-    }
 }
