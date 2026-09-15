@@ -21,7 +21,6 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelCampos = new JPanel(new GridLayout(2, 3, 15, 10));
         panelCampos.setPreferredSize(new Dimension(550, 100));
 
-
         JPanel panelTitulo = new JPanel(new BorderLayout(5, 3));
         panelTitulo.add(new JLabel("Título"), BorderLayout.NORTH);
 
@@ -30,7 +29,6 @@ public class VentanaPrincipal extends JFrame {
         panelTitulo.add(txtTitulo, BorderLayout.CENTER);
 
         panelCampos.add(panelTitulo);
-
 
         JPanel panelAutor = new JPanel(new BorderLayout(5, 3));
         panelAutor.add(new JLabel("Autor"), BorderLayout.NORTH);
@@ -41,7 +39,6 @@ public class VentanaPrincipal extends JFrame {
 
         panelCampos.add(panelAutor);
 
-
         JPanel panelCodigo = new JPanel(new BorderLayout(5, 3));
         panelCodigo.add(new JLabel("Código"), BorderLayout.NORTH);
 
@@ -50,7 +47,6 @@ public class VentanaPrincipal extends JFrame {
         panelCodigo.add(txtCodigo, BorderLayout.CENTER);
 
         panelCampos.add(panelCodigo);
-
 
         JPanel panelGenero = new JPanel(new BorderLayout(5, 3));
         panelGenero.add(new JLabel("Género"), BorderLayout.NORTH);
@@ -61,7 +57,6 @@ public class VentanaPrincipal extends JFrame {
 
         panelCampos.add(panelGenero);
 
-
         JPanel panelAño = new JPanel(new BorderLayout(5, 3));
         panelAño.add(new JLabel("Año de publicación"), BorderLayout.NORTH);
 
@@ -70,7 +65,6 @@ public class VentanaPrincipal extends JFrame {
         panelAño.add(txtAño, BorderLayout.CENTER);
 
         panelCampos.add(panelAño);
-
 
         JPanel panelCopias = new JPanel(new BorderLayout(5, 3));
         panelCopias.add(new JLabel("Copias disponibles"), BorderLayout.NORTH);
@@ -81,16 +75,13 @@ public class VentanaPrincipal extends JFrame {
 
         panelCampos.add(panelCopias);
 
-
         JButton btnCrear = new JButton("Crear libro");
 
         JPanel panelBoton = new JPanel();
         panelBoton.add(btnCrear);
 
-
         panel.add(panelCampos, BorderLayout.NORTH);
         panel.add(panelBoton, BorderLayout.CENTER);
-
 
         setTitle("Gestión de Libros");
         setSize(600, 250);
@@ -111,39 +102,45 @@ public class VentanaPrincipal extends JFrame {
         String copias = txtCopias.getText();
 
         if (titulo.isEmpty() || autor.isEmpty() || codigo.isEmpty() || genero.isEmpty() || año.isEmpty() || copias.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor ingrese todos los campos");
+            JOptionPane.showMessageDialog(this, "Por favor ingrese todos los campos");
+            return;
         }
-        int añoPlublicacion;
-        int  copiasPlublicacion;
+
+        int añoPublicacion;
+        int copiasPlublicacion;
 
         try {
-            añoPlublicacion=Integer.parseInt(año);
-            copiasPlublicacion=Integer.parseInt(copias);
-        }catch (NumberFormatException e){
+            añoPublicacion = Integer.parseInt(año);
+            copiasPlublicacion = Integer.parseInt(copias);
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El año y las copias deben de ser numeros");
             return;
         }
-        if (copiasPlublicacion < 0){
+
+        if (copiasPlublicacion < 0) {
             JOptionPane.showMessageDialog(null, "La copia debe ser positivo");
             return;
         }
+
         int añoActual = Year.now().getValue();
 
-        if (añoPlublicacion > añoActual){
-            JOptionPane.showMessageDialog(this,"El año de publicación no puede ser mayor al año actual");
+        if (añoPublicacion > añoActual) {
+            JOptionPane.showMessageDialog(this, "El año de publicación no puede ser mayor al año actual");
             return;
         }
-        if (biblioteca.codigoExistente(codigo)){
-            JOptionPane.showMessageDialog(this,"El libro ya existe");
-            return;
-        }
+
         Libro libro = new Libro(
-                titulo, autor, codigo, genero, añoPlublicacion, copiasPlublicacion
+                titulo, autor, codigo, genero, añoPublicacion, copiasPlublicacion
         );
 
-        biblioteca.agregarLibro(libro);
+        try {
+            biblioteca.agregarLibro(libro);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
+        }
 
-        JOptionPane.showMessageDialog(this,"Libro agregado correctamente");
+        JOptionPane.showMessageDialog(this, "Libro agregado correctamente");
 
         txtTitulo.setText("");
         txtAutor.setText("");
@@ -153,3 +150,4 @@ public class VentanaPrincipal extends JFrame {
         txtCopias.setText("");
     }
 }
+
