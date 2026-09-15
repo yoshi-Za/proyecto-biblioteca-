@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.time.Year;
 
 public class VentanaPrincipal extends JFrame {
     private Biblioteca biblioteca;
@@ -78,5 +79,29 @@ public class VentanaPrincipal extends JFrame {
             JOptionPane.showMessageDialog(null, "La copia debe ser positivo");
             return;
         }
+        int añoActual = Year.now().getValue();
+
+        if (añoPlublicacion > añoActual){
+            JOptionPane.showMessageDialog(this,"El año de publicación no puede ser mayor al año actual");
+            return;
+        }
+        if (biblioteca.codigoExistente(codigo)){
+            JOptionPane.showMessageDialog(this,"El libro ya existe");
+            return;
+        }
+        Libro libro = new Libro(
+                titulo, autor, codigo, genero, añoPlublicacion, copiasPlublicacion
+        );
+
+        biblioteca.agregarLibro(libro);
+
+        JOptionPane.showMessageDialog(this,"Libro agregado correctamente");
+
+        txtTitulo.setText("");
+        txtAutor.setText("");
+        txtCodigo.setText("");
+        txtGenero.setText("");
+        txtAño.setText("");
+        txtCopias.setText("");
     }
 }
