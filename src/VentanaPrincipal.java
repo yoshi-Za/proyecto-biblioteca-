@@ -13,44 +13,92 @@ public class VentanaPrincipal extends JFrame {
     private JTextField txtCopias;
 
     public VentanaPrincipal() {
+
         biblioteca = new Biblioteca();
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2,3,10,10));
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        panel.add(new JLabel("Titulo:"));
-        panel.add(txtTitulo = new JTextField());
-        panel.add(txtTitulo);
+        JPanel panelCampos = new JPanel(new GridLayout(2, 3, 15, 10));
+        panelCampos.setPreferredSize(new Dimension(550, 100));
 
-        panel.add(new JLabel("Autor:"));
-        panel.add(txtAutor = new JTextField());
-        panel.add(txtAutor);
 
-        panel.add(new JLabel("Codigo:"));
-        panel.add(txtCodigo = new JTextField());
-        panel.add(txtCodigo);
+        JPanel panelTitulo = new JPanel(new BorderLayout(5, 3));
+        panelTitulo.add(new JLabel("Título"), BorderLayout.NORTH);
 
-        panel.add(new JLabel("Genero:"));
-        panel.add(txtGenero = new JTextField());
-        panel.add(txtGenero);
+        txtTitulo = new JTextField();
+        txtTitulo.setPreferredSize(new Dimension(160, 25));
+        panelTitulo.add(txtTitulo, BorderLayout.CENTER);
 
-        panel.add(new JLabel("Año publicación"));
-        panel.add(txtAño = new JTextField());
-        panel.add(txtAño);
+        panelCampos.add(panelTitulo);
 
-        panel.add(new JLabel("Copias:"));
-        panel.add(txtCopias = new JTextField());
-        panel.add(txtCopias);
 
-        JButton btnCrear = new JButton("Crear Libro");
-        panel.add(btnCrear);
+        JPanel panelAutor = new JPanel(new BorderLayout(5, 3));
+        panelAutor.add(new JLabel("Autor"), BorderLayout.NORTH);
 
-        setTitle("Gestión de libros");
-        setSize(500,400);
+        txtAutor = new JTextField();
+        txtAutor.setPreferredSize(new Dimension(160, 25));
+        panelAutor.add(txtAutor, BorderLayout.CENTER);
+
+        panelCampos.add(panelAutor);
+
+
+        JPanel panelCodigo = new JPanel(new BorderLayout(5, 3));
+        panelCodigo.add(new JLabel("Código"), BorderLayout.NORTH);
+
+        txtCodigo = new JTextField();
+        txtCodigo.setPreferredSize(new Dimension(160, 25));
+        panelCodigo.add(txtCodigo, BorderLayout.CENTER);
+
+        panelCampos.add(panelCodigo);
+
+
+        JPanel panelGenero = new JPanel(new BorderLayout(5, 3));
+        panelGenero.add(new JLabel("Género"), BorderLayout.NORTH);
+
+        txtGenero = new JTextField();
+        txtGenero.setPreferredSize(new Dimension(160, 25));
+        panelGenero.add(txtGenero, BorderLayout.CENTER);
+
+        panelCampos.add(panelGenero);
+
+
+        JPanel panelAño = new JPanel(new BorderLayout(5, 3));
+        panelAño.add(new JLabel("Año de publicación"), BorderLayout.NORTH);
+
+        txtAño = new JTextField();
+        txtAño.setPreferredSize(new Dimension(160, 25));
+        panelAño.add(txtAño, BorderLayout.CENTER);
+
+        panelCampos.add(panelAño);
+
+
+        JPanel panelCopias = new JPanel(new BorderLayout(5, 3));
+        panelCopias.add(new JLabel("Copias disponibles"), BorderLayout.NORTH);
+
+        txtCopias = new JTextField();
+        txtCopias.setPreferredSize(new Dimension(160, 25));
+        panelCopias.add(txtCopias, BorderLayout.CENTER);
+
+        panelCampos.add(panelCopias);
+
+
+        JButton btnCrear = new JButton("Crear libro");
+
+        JPanel panelBoton = new JPanel();
+        panelBoton.add(btnCrear);
+
+
+        panel.add(panelCampos, BorderLayout.NORTH);
+        panel.add(panelBoton, BorderLayout.CENTER);
+
+
+        setTitle("Gestión de Libros");
+        setSize(600, 250);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         btnCrear.addActionListener(e -> crearLibro());
+
         add(panel);
     }
 
