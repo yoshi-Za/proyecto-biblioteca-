@@ -17,6 +17,13 @@ public class Biblioteca {
         libros = new ArrayList<>();
         indiceAutores = new HashMap<>();
         codigos = new HashSet<>();
+
+        agregarLibro(new Libro("Cien años de soledad", "Gabriel García Márquez", "LIB-001", "Realismo Mágico", 1967, 5));
+        agregarLibro(new Libro("Fahrenheit 451", "Ray Bradbury", "LIB-002", "Ciencia Ficción", 1953, 4));
+        agregarLibro(new Libro("Orgullo y prejuicio", "Jane Austen", "LIB-003", "Romance", 1813, 6));
+        agregarLibro(new Libro("El señor de los anillos", "J.R.R. Tolkien", "LIB-004", "Fantasía", 1954, 3));
+        agregarLibro(new Libro("Ensayo sobre la ceguera", "José Saramago", "LIB-005", "Novela", 1995, 2));
+        agregarLibro(new Libro("La metamosfosis", "Franz Kafka", "LIB-006", "Absurdo", 1915, 7));
     }
 
     // agrega un libro

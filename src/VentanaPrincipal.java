@@ -21,10 +21,8 @@ public class VentanaPrincipal extends JFrame {
 
         biblioteca = new Biblioteca();
 
-        // Panel principal con margen general
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        // --- 1. FORMULARIO DE CAMPOS ---
         JPanel panelCampos = new JPanel(new GridLayout(2, 3, 15, 10));
         panelCampos.setPreferredSize(new Dimension(650, 100));
 
@@ -74,12 +72,10 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelBoton = new JPanel();
         panelBoton.add(btnCrear);
 
-        // Agrupamos el formulario en un solo panel para el área superior (NORTH)
         JPanel panelSuperior = new JPanel(new BorderLayout(5, 5));
         panelSuperior.add(panelCampos, BorderLayout.NORTH);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
-        // --- 2. BÚSQUEDA, TABLA Y ELIMINACIÓN ---
         JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         panelBuscador.add(new JLabel("Filtrar por autor:"));
         txtFiltroAutor = new JTextField(12);
@@ -93,7 +89,6 @@ public class VentanaPrincipal extends JFrame {
         panelBuscador.add(btnLimpiar);
         panelBuscador.add(btnEliminar);
 
-        // Configuración de la tabla
         String[] columnas = {"Título", "Autor", "Código", "Género", "Año", "Copias"};
         modelTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -105,17 +100,15 @@ public class VentanaPrincipal extends JFrame {
         JScrollPane scrollTabla = new JScrollPane(tablaLibros);
         scrollTabla.setPreferredSize(new Dimension(650, 180));
 
-        // Agrupamos el buscador y la tabla para el área central (CENTER)
         JPanel panelInferior = new JPanel(new BorderLayout(5, 5));
         panelInferior.add(panelBuscador, BorderLayout.NORTH);
         panelInferior.add(scrollTabla, BorderLayout.CENTER);
 
-        // --- 3. ENSAMBLAJE FINAL Y VENTANA ---
         panel.add(panelSuperior, BorderLayout.NORTH);
         panel.add(panelInferior, BorderLayout.CENTER);
 
         setTitle("Gestión de Libros");
-        setSize(700, 550); // Se amplía la ventana para permitir ver todo
+        setSize(700, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -129,6 +122,7 @@ public class VentanaPrincipal extends JFrame {
         btnEliminar.addActionListener(e -> eliminarSeleccionado());
 
         add(panel);
+        actualizarTabla(biblioteca.obtenerTodos());
     }
 
     private void crearLibro() {
