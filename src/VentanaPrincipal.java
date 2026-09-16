@@ -1,6 +1,8 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.Year;
+import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
     private Biblioteca biblioteca;
@@ -11,6 +13,9 @@ public class VentanaPrincipal extends JFrame {
     private JTextField txtGenero;
     private JTextField txtAño;
     private JTextField txtCopias;
+    private DefaultTableModel modelTabla;
+    private JTable tablaLibros;
+    private JTextField txtFiltroAutor;
 
     public VentanaPrincipal() {
 
@@ -90,6 +95,47 @@ public class VentanaPrincipal extends JFrame {
 
         btnCrear.addActionListener(e -> crearLibro());
 
+        // --- BÚSQUEDA Y FILTRO ---
+        JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelBuscador.add(new JLabel("Filtrar por autor:"));
+        txtFiltroAutor = new JTextField(12);
+        panelBuscador.add(txtFiltroAutor);
+
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnLimpiar = new JButton("Mostrar Todos");
+        JButton btnEliminar = new JButton("Eliminar Seleccionado");
+
+        panelBuscador.add(btnBuscar);
+        panelBuscador.add(btnLimpiar);
+        panelBuscador.add(btnEliminar);
+
+// --- TABLA DE LIBROS ---
+        String[] columnas = {"Título", "Autor", "Código", "Género", "Año", "Copias"};
+        modelTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Evita editar celdas directamente
+            }
+        };
+        tablaLibros = new JTable(modelTabla);
+        JScrollPane scrollTabla = new JScrollPane(tablaLibros);
+        scrollTabla.setPreferredSize(new Dimension(550, 180));
+
+// --- ASIGNAR A PANELES ---
+        panel.add(panelBuscador, BorderLayout.CENTER);
+        panel.add(scrollTabla, BorderLayout.SOUTH);
+
+// --- TAMAÑO DE VENTANA ---
+        setSize(650, 500);
+
+// --- EVENTOS DE LOS BOTONES ---
+        btnBuscar.addActionListener(e -> buscarPorAutor());
+        btnLimpiar.addActionListener(e -> {
+            txtFiltroAutor.setText("");
+            actualizarTabla(biblioteca.obtenerTodos());
+        });
+        btnEliminar.addActionListener(e -> eliminarSeleccionado());
+
         add(panel);
     }
 
@@ -148,6 +194,42 @@ public class VentanaPrincipal extends JFrame {
         txtGenero.setText("");
         txtAño.setText("");
         txtCopias.setText("");
+        // Refresca la tabla automáticamente con el nuevo libro
+        actualizarTabla(biblioteca.obtenerTodos());
+    }
+    // Llena la JTable con la lista de libros actual
+    private void actualizarTabla(ArrayList<Libro> listaLibros) {
+        modelTabla.setRowCount(0); // Limpia las filas anteriores
+
+        for (Libro libro : listaLibros) {
+            Object[] fila = {
+                    libro.getTitulo(),
+                    libro.getAutor(),
+                    libro.getCodigo(),
+                    libro.getGenero(),
+                    libro.getañoPublicacion(),
+                    libro.getCopiasDisponibles()
+            };
+            modelTabla.addRow(fila);
+        }
+    }
+    // Filtra la tabla con la lógica de Biblioteca
+    private void buscarPorAutor() {
+        String textoAutor = txtFiltroAutor.getText();
+        ArrayList<Libro> resultado = biblioteca.filtrarPorAutor(textoAutor);
+        actualizarTabla(resultado);
+    }
+    // Elimina el libro seleccionado en la tabla
+    private void eliminarSeleccionado() {
+        int filaSeleccionada = tablaLibros.getSelectedRow();
+
+        if (filaSeleccionada >= 0) {
+            biblioteca.eliminarLibro(filaSeleccionada);
+            actualizarTabla(biblioteca.obtenerTodos());
+            JOptionPane.showMessageDialog(this, "Libro eliminado correctamente");
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un libro de la tabla");
+        }
     }
 }
 
