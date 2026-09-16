@@ -21,82 +21,66 @@ public class VentanaPrincipal extends JFrame {
 
         biblioteca = new Biblioteca();
 
+        // Panel principal con margen general
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
+        // --- 1. FORMULARIO DE CAMPOS ---
         JPanel panelCampos = new JPanel(new GridLayout(2, 3, 15, 10));
-        panelCampos.setPreferredSize(new Dimension(550, 100));
+        panelCampos.setPreferredSize(new Dimension(650, 100));
 
         JPanel panelTitulo = new JPanel(new BorderLayout(5, 3));
         panelTitulo.add(new JLabel("Título"), BorderLayout.NORTH);
-
         txtTitulo = new JTextField();
         txtTitulo.setPreferredSize(new Dimension(160, 25));
         panelTitulo.add(txtTitulo, BorderLayout.CENTER);
-
         panelCampos.add(panelTitulo);
 
         JPanel panelAutor = new JPanel(new BorderLayout(5, 3));
         panelAutor.add(new JLabel("Autor"), BorderLayout.NORTH);
-
         txtAutor = new JTextField();
         txtAutor.setPreferredSize(new Dimension(160, 25));
         panelAutor.add(txtAutor, BorderLayout.CENTER);
-
         panelCampos.add(panelAutor);
 
         JPanel panelCodigo = new JPanel(new BorderLayout(5, 3));
         panelCodigo.add(new JLabel("Código"), BorderLayout.NORTH);
-
         txtCodigo = new JTextField();
         txtCodigo.setPreferredSize(new Dimension(160, 25));
         panelCodigo.add(txtCodigo, BorderLayout.CENTER);
-
         panelCampos.add(panelCodigo);
 
         JPanel panelGenero = new JPanel(new BorderLayout(5, 3));
         panelGenero.add(new JLabel("Género"), BorderLayout.NORTH);
-
         txtGenero = new JTextField();
         txtGenero.setPreferredSize(new Dimension(160, 25));
         panelGenero.add(txtGenero, BorderLayout.CENTER);
-
         panelCampos.add(panelGenero);
 
         JPanel panelAño = new JPanel(new BorderLayout(5, 3));
         panelAño.add(new JLabel("Año de publicación"), BorderLayout.NORTH);
-
         txtAño = new JTextField();
         txtAño.setPreferredSize(new Dimension(160, 25));
         panelAño.add(txtAño, BorderLayout.CENTER);
-
         panelCampos.add(panelAño);
 
         JPanel panelCopias = new JPanel(new BorderLayout(5, 3));
         panelCopias.add(new JLabel("Copias disponibles"), BorderLayout.NORTH);
-
         txtCopias = new JTextField();
         txtCopias.setPreferredSize(new Dimension(160, 25));
         panelCopias.add(txtCopias, BorderLayout.CENTER);
-
         panelCampos.add(panelCopias);
 
         JButton btnCrear = new JButton("Crear libro");
-
         JPanel panelBoton = new JPanel();
         panelBoton.add(btnCrear);
 
-        panel.add(panelCampos, BorderLayout.NORTH);
-        panel.add(panelBoton, BorderLayout.CENTER);
+        // Agrupamos el formulario en un solo panel para el área superior (NORTH)
+        JPanel panelSuperior = new JPanel(new BorderLayout(5, 5));
+        panelSuperior.add(panelCampos, BorderLayout.NORTH);
+        panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
-        setTitle("Gestión de Libros");
-        setSize(600, 250);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        btnCrear.addActionListener(e -> crearLibro());
-
-        // --- BÚSQUEDA Y FILTRO ---
-        JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // --- 2. BÚSQUEDA, TABLA Y ELIMINACIÓN ---
+        JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         panelBuscador.add(new JLabel("Filtrar por autor:"));
         txtFiltroAutor = new JTextField(12);
         panelBuscador.add(txtFiltroAutor);
@@ -109,26 +93,34 @@ public class VentanaPrincipal extends JFrame {
         panelBuscador.add(btnLimpiar);
         panelBuscador.add(btnEliminar);
 
-// --- TABLA DE LIBROS ---
+        // Configuración de la tabla
         String[] columnas = {"Título", "Autor", "Código", "Género", "Año", "Copias"};
         modelTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Evita editar celdas directamente
+                return false; // Desactiva edición directa en la tabla
             }
         };
         tablaLibros = new JTable(modelTabla);
         JScrollPane scrollTabla = new JScrollPane(tablaLibros);
-        scrollTabla.setPreferredSize(new Dimension(550, 180));
+        scrollTabla.setPreferredSize(new Dimension(650, 180));
 
-// --- ASIGNAR A PANELES ---
-        panel.add(panelBuscador, BorderLayout.CENTER);
-        panel.add(scrollTabla, BorderLayout.SOUTH);
+        // Agrupamos el buscador y la tabla para el área central (CENTER)
+        JPanel panelInferior = new JPanel(new BorderLayout(5, 5));
+        panelInferior.add(panelBuscador, BorderLayout.NORTH);
+        panelInferior.add(scrollTabla, BorderLayout.CENTER);
 
-// --- TAMAÑO DE VENTANA ---
-        setSize(650, 500);
+        // --- 3. ENSAMBLAJE FINAL Y VENTANA ---
+        panel.add(panelSuperior, BorderLayout.NORTH);
+        panel.add(panelInferior, BorderLayout.CENTER);
 
-// --- EVENTOS DE LOS BOTONES ---
+        setTitle("Gestión de Libros");
+        setSize(700, 550); // Se amplía la ventana para permitir ver todo
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Eventos de los botones
+        btnCrear.addActionListener(e -> crearLibro());
         btnBuscar.addActionListener(e -> buscarPorAutor());
         btnLimpiar.addActionListener(e -> {
             txtFiltroAutor.setText("");
